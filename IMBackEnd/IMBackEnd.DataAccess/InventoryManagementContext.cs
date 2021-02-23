@@ -28,7 +28,7 @@ namespace IMBackEnd.DataAccess
             modelBuilder.Entity<Inventory>(entity =>
             {
                 entity.HasKey(e => new { e.StoreId, e.ProductId })
-                    .HasName("PK__Inventor__F0C23D6DCD276F59");
+                    .HasName("PK__Inventor__F0C23D6D94E30A0D");
 
                 entity.ToTable("Inventory");
 
@@ -38,13 +38,13 @@ namespace IMBackEnd.DataAccess
                     .WithMany(p => p.Inventories)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__Produ__00200768");
+                    .HasConstraintName("FK__Inventory__Produ__0A9D95DB");
 
                 entity.HasOne(d => d.Store)
                     .WithMany(p => p.Inventories)
                     .HasForeignKey(d => d.StoreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__Store__7F2BE32F");
+                    .HasConstraintName("FK__Inventory__Store__09A971A2");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -64,7 +64,7 @@ namespace IMBackEnd.DataAccess
             {
                 entity.ToTable("Store");
 
-                entity.Property(e => e.Addess)
+                entity.Property(e => e.Address)
                     .IsRequired()
                     .HasMaxLength(99);
 
