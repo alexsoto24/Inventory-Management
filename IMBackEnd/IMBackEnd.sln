@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMBackEnd.WebAPI", "IMBackEnd.WebAPI\IMBackEnd.WebAPI.csproj", "{DD3DB93D-C4F9-4493-BE63-D9DF72B19083}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMBackEnd.WebAPI", "IMBackEnd.WebAPI\IMBackEnd.WebAPI.csproj", "{DD3DB93D-C4F9-4493-BE63-D9DF72B19083}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMBackEnd.DataAccess", "IMBackEnd.DataAccess\IMBackEnd.DataAccess.csproj", "{0C5F922F-0AA4-4843-AED1-C9CD4B41C3AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMBackEnd.DataAccess", "IMBackEnd.DataAccess\IMBackEnd.DataAccess.csproj", "{0C5F922F-0AA4-4843-AED1-C9CD4B41C3AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMBackEnd.Domain", "IMBackEnd.Domain\IMBackEnd.Domain.csproj", "{528E337B-6E5B-4C85-ACE8-1A48375E6E23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{0C5F922F-0AA4-4843-AED1-C9CD4B41C3AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C5F922F-0AA4-4843-AED1-C9CD4B41C3AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C5F922F-0AA4-4843-AED1-C9CD4B41C3AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{528E337B-6E5B-4C85-ACE8-1A48375E6E23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{528E337B-6E5B-4C85-ACE8-1A48375E6E23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{528E337B-6E5B-4C85-ACE8-1A48375E6E23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{528E337B-6E5B-4C85-ACE8-1A48375E6E23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

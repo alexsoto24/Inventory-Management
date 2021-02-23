@@ -28,7 +28,7 @@ namespace IMBackEnd.DataAccess
             modelBuilder.Entity<Inventory>(entity =>
             {
                 entity.HasKey(e => new { e.StoreId, e.ProductId })
-                    .HasName("PK__Inventor__F0C23D6D94E30A0D");
+                    .HasName("PK__Inventor__F0C23D6DBB05BAB5");
 
                 entity.ToTable("Inventory");
 
@@ -37,14 +37,12 @@ namespace IMBackEnd.DataAccess
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.Inventories)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__Produ__0A9D95DB");
+                    .HasConstraintName("FK__Inventory__Produ__17F790F9");
 
                 entity.HasOne(d => d.Store)
                     .WithMany(p => p.Inventories)
                     .HasForeignKey(d => d.StoreId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__Store__09A971A2");
+                    .HasConstraintName("FK__Inventory__Store__17036CC0");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -63,6 +61,15 @@ namespace IMBackEnd.DataAccess
             modelBuilder.Entity<Store>(entity =>
             {
                 entity.ToTable("Store");
+
+                entity.HasIndex(e => e.Phone, "UQ__Store__5C7E359E60AF7B93")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Address, "UQ__Store__7D0C3F3289754E86")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Email, "UQ__Store__A9D10534D7A1A110")
+                    .IsUnique();
 
                 entity.Property(e => e.Address)
                     .IsRequired()
