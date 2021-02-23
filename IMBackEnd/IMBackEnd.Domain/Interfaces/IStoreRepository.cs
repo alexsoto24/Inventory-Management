@@ -14,5 +14,9 @@ namespace IMBackEnd.Domain.Interfaces
         bool EditStoreInfo(Store store);
 
         IEnumerable<Store> GetStores(string name = null);
+
+        Store GetStoreById(int id);
+
+        Store GetStoreByEmail(string email);
     }
 }
