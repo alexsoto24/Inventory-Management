@@ -12,5 +12,9 @@ namespace IMBackEnd.Domain.Interfaces
         bool RemoveFromInventory(int storeId, int productId);
 
         bool EditInventory(int storeId, Product product);
+
+        IEnumerable<Product> GetStoreInventory(int storeId);
+
+        Product GetProductByStore(int storeId, int productId);
     }
 }
