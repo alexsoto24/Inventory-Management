@@ -54,22 +54,135 @@ namespace IMBackEnd.DataAccess.Repositories
 
         public bool EditStoreInfo(IMBackEnd.Domain.Models.Store store)
         {
-            throw new NotImplementedException();
+            var dbStore = _context.Stores.FirstOrDefault(s => s.Id == store.Id);
+
+            if (dbStore == null)
+            {
+                return false;
+            }
+
+            //dbStore.Email = store.Email;
+            dbStore.Phone = store.Phone;
+            dbStore.Address = store.Address;
+
+            _context.SaveChanges();
+
+            return true;
         }
 
         public IEnumerable<IMBackEnd.Domain.Models.Store> GetStores(string name = null)
         {
-            throw new NotImplementedException();
+            List<Store> dbStores = new List<Store>();
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                dbStores = _context.Stores
+                    .Include(s => s.Inventories)
+                    .ThenInclude(i => i.Product)
+                    .Where(s => s.Name.Contains(name))
+                    .ToList();
+            }
+            else
+            {
+                dbStores = _context.Stores
+                    .Include(s => s.Inventories)
+                    .ThenInclude(i => i.Product)
+                    .ToList();
+            }
+
+            List<Domain.Models.Store> stores = new List<Domain.Models.Store>();
+
+            if (!dbStores.Any())
+            {
+                return stores;
+            }
+
+            stores = dbStores.Select(s => new Domain.Models.Store
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Email = s.Email,
+                Phone = s.Phone,
+                Address = s.Address,
+                Inventory = s.Inventories.Select(i => new Domain.Models.Product
+                {
+                    Id = i.Product.Id,
+                    Name = i.Product.Name,
+                    Price = i.Product.Price,
+                    Description = i.Product.Description,
+                    Markup = i.Markup,
+                    Stock = i.Stock
+                }).ToList()
+            }).ToList();
+
+            return stores;
+
         }
 
         public IMBackEnd.Domain.Models.Store GetStoreById(int id)
         {
-            throw new NotImplementedException();
+            var dbStore = _context.Stores
+                .Include(s => s.Inventories)
+                .ThenInclude(i => i.Product)
+                .FirstOrDefault(s => s.Id == id);
+            
+            if(dbStore == null)
+            {
+                return null;
+            }
+
+            Domain.Models.Store store = new Domain.Models.Store
+            {
+                Id = dbStore.Id,
+                Name = dbStore.Name,
+                Email = dbStore.Email,
+                Phone = dbStore.Phone,
+                Address = dbStore.Address,
+                Inventory = dbStore.Inventories.Select(i => new Domain.Models.Product
+                {
+                    Id = i.Product.Id,
+                    Name = i.Product.Name,
+                    Price = i.Product.Price,
+                    Description = i.Product.Description,
+                    Markup = i.Markup,
+                    Stock = i.Stock
+                }).ToList()
+            };
+
+            return store;
         }
 
         public IMBackEnd.Domain.Models.Store GetStoreByEmail(string email)
         {
-            throw new NotImplementedException();
+            var dbStore = _context.Stores
+                .Include(s => s.Inventories)
+                .ThenInclude(i => i.Product)
+                .FirstOrDefault(s => s.Email == email);
+
+            if (dbStore == null)
+            {
+                return null;
+            }
+
+            Domain.Models.Store store = new Domain.Models.Store
+            {
+                Id = dbStore.Id,
+                Name = dbStore.Name,
+                Email = dbStore.Email,
+                Phone = dbStore.Phone,
+                Address = dbStore.Address,
+                Inventory = dbStore.Inventories.Select(i => new Domain.Models.Product
+                {
+                    Id = i.Product.Id,
+                    Name = i.Product.Name,
+                    Price = i.Product.Price,
+                    Description = i.Product.Description,
+                    Markup = i.Markup,
+                    Stock = i.Stock
+                }).ToList()
+            };
+
+            return store;
         }
     }
 }
