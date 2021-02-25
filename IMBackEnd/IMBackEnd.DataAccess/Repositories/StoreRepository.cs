@@ -18,7 +18,7 @@ namespace IMBackEnd.DataAccess.Repositories
         }
         public bool RegisterStore(IMBackEnd.Domain.Models.Store store)
         {
-            var dbStore = _context.Stores.FirstOrDefault(s => s.Id == store.Id);
+            var dbStore = _context.Stores.FirstOrDefault(s => s.Email == store.Email || s.Phone == store.Phone);
             if(dbStore != null)
             {
                 return false;
