@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IMBackEnd.DataAccess;
+using IMBackEnd.DataAccess.Repositories;
+using IMBackEnd.Domain.Interfaces;
 
 namespace IMBackEnd.WebAPI
 {
@@ -45,6 +47,10 @@ namespace IMBackEnd.WebAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "IMBackEnd.WebAPI", Version = "v1" });
             });
+
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IStoreRepository, StoreRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
 
             services.AddDbContext<InventoryManagementContext>(options => options.UseSqlServer(Configuration.GetConnectionString("default")));
         }

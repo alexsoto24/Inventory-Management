@@ -8,7 +8,7 @@ using IMBackEnd.Domain.Models;
 
 namespace IMBackEnd.DataAccess.Repositories
 {
-    class InventoryRepository : IInventoryRepository
+    public class InventoryRepository : IInventoryRepository
     {
         private readonly InventoryManagementContext _context;
 

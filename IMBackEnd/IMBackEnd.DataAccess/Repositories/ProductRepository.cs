@@ -8,7 +8,7 @@ using IMBackEnd.Domain.Models;
 
 namespace IMBackEnd.DataAccess.Repositories
 {
-    class ProductRepository : IProductRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly InventoryManagementContext _context;
 
@@ -93,7 +93,7 @@ namespace IMBackEnd.DataAccess.Repositories
 
         public Domain.Models.Product GetProductById(int id)
         {
-            var dbProduct = _context.Products.FirstOrDefault(p => p.Id == p.Id);
+            var dbProduct = _context.Products.FirstOrDefault(p => p.Id == id);
 
             if(dbProduct == null)
             {
