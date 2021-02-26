@@ -12,114 +12,137 @@ namespace IMBackEnd.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class StoreController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
-        public ProductController(IProductRepository productRepository)
+        private readonly IStoreRepository _storeRepository;
+
+        public StoreController(IStoreRepository storeRepository)
         {
-            _productRepository = productRepository;
+            _storeRepository = storeRepository;
         }
-        // GET: api/<ProductController>
+
+        // GET: api/<StoreController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Domain.Models.Product>>> Get()
+        public async Task<ActionResult<IEnumerable<Store>>> Get()
         {
-            IEnumerable<Product> dProducts;
-
+            IEnumerable<Store> dStores;
             try
             {
-                dProducts = await Task.FromResult(_productRepository.GetProducts());
+                dStores = await Task.FromResult(_storeRepository.GetStores());
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
 
-            if (dProducts.Any())
+            if (dStores.Any())
             {
-                return Ok(dProducts);
+                return Ok(dStores);
             }
 
             return NotFound();
         }
 
-        // GET api/<ProductController>/5
+        // GET api/<StoreController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> Get(int id)
+        public async Task<ActionResult<Store>> Get(int id)
         {
-            Product dProduct;
+            Store dStore;
 
             try
             {
-                dProduct = await Task.FromResult(_productRepository.GetProductById(id));
+                dStore = await Task.FromResult(_storeRepository.GetStoreById(id));
             }
             catch(Exception e)
             {
                 return BadRequest(e.Message);
             }
-            
-            if (dProduct != null)
+
+            if(dStore != null)
             {
-                return Ok(dProduct);
+                return Ok(dStore);
             }
 
             return NotFound();
         }
 
-        // POST api/<ProductController>
+        [HttpGet("email/{email}")]
+        public async Task<ActionResult<Store>> Get(string email)
+        {
+            Store dStore;
+
+            try
+            {
+                dStore = await Task.FromResult(_storeRepository.GetStoreByEmail(email));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            if (dStore != null)
+            {
+                return Ok(dStore);
+            }
+
+            return NotFound();
+        }
+
+        // POST api/<StoreController>
         [HttpPost]
-        public async Task<IActionResult> Post(Product product)
+        public async Task<IActionResult> Post(Store store)
         {
             bool created;
 
             try
             {
-                created = await Task.FromResult(_productRepository.CreateProduct(product));
+                created = await Task.FromResult(_storeRepository.RegisterStore(store));
             }
             catch(Exception e)
             {
                 return BadRequest(e.Message);
             }
-            
+
             if (created)
             {
-                return CreatedAtAction(nameof(Post), new { id = product.Id }, product);
+                return CreatedAtAction(nameof(Post), new { id = store.Id }, store);
             }
 
             return StatusCode(409);
         }
 
-        // PUT api/<ProductController>/5
+        // PUT api/<StoreController>/5
         [HttpPut]
-        public async Task<IActionResult> Put(Product product)
+        public async Task<IActionResult> Put(Store store)
         {
-
             bool updated;
+
             try
             {
-                updated = await Task.FromResult(_productRepository.EditProduct(product));
+                updated = await Task.FromResult(_storeRepository.EditStoreInfo(store));
             }
             catch(Exception e)
             {
                 return BadRequest(e.Message);
             }
-            
+
             if (updated)
             {
                 return Ok();
             }
 
             return NotFound();
-
         }
 
-        // DELETE api/<ProductController>/5
+        // DELETE api/<StoreController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             bool deleted;
+
             try
             {
-                deleted = await Task.FromResult(_productRepository.DeleteProduct(id));
+                deleted = await Task.FromResult(_storeRepository.DeleteStore(id));
             }
             catch(Exception e)
             {
