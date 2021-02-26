@@ -99,7 +99,9 @@ namespace IMBackEnd.DataAccess.Repositories
 
         public Domain.Models.Product GetProductByStore(int storeId, int productId)
         {
-            var dbInventory = _context.Inventories.FirstOrDefault(i => i.StoreId == storeId && i.ProductId == productId);
+            var dbInventory = _context.Inventories
+                .Include(i => i.Product)
+                .FirstOrDefault(i => i.StoreId == storeId && i.ProductId == productId);
 
             if(dbInventory == null)
             {
