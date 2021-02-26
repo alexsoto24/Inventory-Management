@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IMBackEnd.DataAccess.Repositories;
 using IMBackEnd.Domain.Interfaces;
 using IMBackEnd.Domain.Models;
 
@@ -24,22 +23,42 @@ namespace IMBackEnd.WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Domain.Models.Product>>> Get()
         {
-            var dProducts = await Task.FromResult(_productRepository.GetProducts());
-            if (dProducts.Any() && dProducts is IEnumerable<Domain.Models.Product> products)
+            IEnumerable<Product> dProducts;
+
+            try
             {
-                return Ok(products);
+                dProducts = await Task.FromResult(_productRepository.GetProducts());
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            if (dProducts.Any())
+            {
+                return Ok(dProducts);
             }
             return NotFound();
         }
 
         // GET api/<ProductController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Domain.Models.Product>> Get(int id)
+        public async Task<ActionResult<Product>> Get(int id)
         {
-            var dProduct = await Task.FromResult(_productRepository.GetProductById(id));
-            if (dProduct is Domain.Models.Product product)
+            Product dProduct;
+
+            try
             {
-                return Ok(product);
+                dProduct = await Task.FromResult(_productRepository.GetProductById(id));
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
+            if (dProduct != null)
+            {
+                return Ok(dProduct);
             }
 
             return NotFound();
@@ -49,24 +68,69 @@ namespace IMBackEnd.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Domain.Models.Product product)
         {
-            var created = await Task.FromResult(_productRepository.CreateProduct(product));
+            bool created;
+
+            try
+            {
+                created = await Task.FromResult(_productRepository.CreateProduct(product));
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
             if (created)
             {
                 return CreatedAtAction(nameof(Get), new { id = product.Id }, product);
             }
+
             return StatusCode(409);
         }
 
         // PUT api/<ProductController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public async Task<IActionResult> Put(Product product)
         {
+
+            bool updated;
+            try
+            {
+                updated = await Task.FromResult(_productRepository.EditProduct(product));
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
+            if (updated)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+
         }
 
         // DELETE api/<ProductController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            bool deleted;
+            try
+            {
+                deleted = await Task.FromResult(_productRepository.DeleteProduct(id));
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            if (deleted)
+            {
+                return Ok();
+            }
+
+            return NotFound();
         }
     }
 }
