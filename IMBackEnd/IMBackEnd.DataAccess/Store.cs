@@ -9,7 +9,7 @@ namespace IMBackEnd.DataAccess
     {
         public Store()
         {
-            Inventories = new HashSet<Inventory>();
+            InventoryEntries = new HashSet<InventoryEntry>();
         }
 
         public int Id { get; set; }
@@ -18,6 +18,6 @@ namespace IMBackEnd.DataAccess
         public string Phone { get; set; }
         public string Address { get; set; }
 
-        public virtual ICollection<Inventory> Inventories { get; set; }
+        public virtual ICollection<InventoryEntry> InventoryEntries { get; set; }
     }
 }

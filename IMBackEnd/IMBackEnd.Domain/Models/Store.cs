@@ -11,6 +11,6 @@ namespace IMBackEnd.Domain.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
-        public List<Product> Inventory { get; set; }
+        public List<InventoryEntry> Inventory { get; set; }
     }
 }

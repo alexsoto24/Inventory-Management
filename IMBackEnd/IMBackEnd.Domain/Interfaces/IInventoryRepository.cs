@@ -7,14 +7,14 @@ namespace IMBackEnd.Domain.Interfaces
 {
     public interface IInventoryRepository
     {
-        bool AddToInventory(int storeId, Product product);
+        bool AddToInventory(InventoryEntry inventoryEntry);
 
-        bool RemoveFromInventory(int storeId, int productId);
+        bool RemoveFromInventory(int storeId, string sku);
 
-        bool EditInventory(int storeId, Product product);
+        bool EditInventory(InventoryEntry inventoryEntry);
 
-        IEnumerable<Product> GetStoreInventory(int storeId);
+        IEnumerable<InventoryEntry> GetStoreInventory(int storeId);
 
-        Product GetProductByStore(int storeId, int productId);
+        InventoryEntry GetProductByStore(int storeId, string sku);
     }
 }

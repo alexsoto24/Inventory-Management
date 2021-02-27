@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS Inventory
+DROP TABLE IF EXISTS InventoryEntry
 DROP TABLE IF EXISTS Store
-DROP TABLE IF EXISTS Product
+
 
 CREATE TABLE Store (
 	Id INT PRIMARY KEY IDENTITY,
@@ -10,43 +10,27 @@ CREATE TABLE Store (
     Address NVARCHAR(99) NOT NULL UNIQUE
 )
 
-CREATE TABLE Product (
-	Id INT PRIMARY KEY IDENTITY,
-	Name NVARCHAR(99) NOT NULL,
-	Price MONEY NOT NULL CHECK (Price > 0),
-	Description NVARCHAR(999) NULL
-)
-
-CREATE TABLE Inventory (
+CREATE TABLE InventoryEntry (
 	StoreId INT NOT NULL FOREIGN KEY REFERENCES Store (Id) ON DELETE CASCADE,
-	ProductId INT NOT NULL FOREIGN KEY REFERENCES Product (Id) ON DELETE CASCADE,
+	SKU NVARCHAR(20) NOT NULL CHECK (LEN(SKU) >= 10),
+	Name NVARCHAR(99) NOT NULL,
+	Description NVARCHAR(999) NULL,
+    Price MONEY NOT NULL CHECK (Price > 0),
 	Stock INT NOT NULL CHECK (Stock >= 0),
-    Markup MONEY NOT NULL CHECK (Markup >= 0),
-	PRIMARY KEY (StoreId, ProductId)
+	PRIMARY KEY (StoreId, SKU)
 )
 
 INSERT INTO Store(Name, Email, Phone, Address) VALUES
 	('Walmart', 'walmart01@email.com', '(619) 691-7945', '75 Broadway, Chula Vista, CA 91910');
 
-INSERT INTO Product(Name, Price, Description) VALUES
-	('Toilet Paper', 2.00, 'toilet paper 4 pack'),
-	('Apples', 1.00, '1 pound bag of red apples'),
-	('Play Station 5', 400.00, 'Sony PlayStation 5 1TB storage'),
-	('Picture Frame', 4.00, '4 x 6 picture frame'),
-	('Notebook', 1.00, '100 sheet college ruled notebook'),
-	('Dell Laptop', 300.00, 'Dell laptop computer, 1TB storage with 8GB of RAM'),
-	('Desk Chair', 80.00, 'black desk chair'),
-	('Makeup Mirror', 30.00, 'small lighted make up mirror');
-
-INSERT INTO Inventory(StoreId, ProductId, Stock, Markup) VALUES
-	(1, 1, 50, 2.00),
-	(1, 2, 30, 2.00),
-	(1, 3, 20, 100.00),
-	(1, 4, 30, 1.00),
-	(1, 5, 50, 1.50),
-	(1, 8, 15, 10.00);
-
+INSERT INTO InventoryEntry(StoreId, SKU, Name, Description, Price, Stock) VALUES
+	(1, '5ZpE-YwD-P4n', 'Toilet Paper','toilet paper 4 pack', 3.00, 300),
+	(1, 'Lt2P-9Fp-C2y', 'Play Station 5', 'Sony PlayStation 5 1TB storage', 500.00, 20),
+	(1, 'ZxjJ-66u-UYE', 'Picture Frame', '4 x 6 picture frame', 4.00, 50),
+	(1, 'oTSN-eKV-Y45', 'Notebook', '100 sheet college ruled notebook', 2.00, 100),
+	(1, 'YZRK-AtP-Y77', 'Dell Laptop', 'Dell laptop computer, 1TB storage with 8GB of RAM', 600.00, 50),
+	(1, 'Vnzb-ZKd-ugw', 'Desk Chair','black desk chair', 80.00, 10),
+	(1, '74ro-xWp-pj6', 'Makeup Mirror', 'small lighted make up mirror', 15.00, 100);
 
 SELECT * FROM Store
-SELECT * FROM Product
-SELECT * FROM Inventory
+SELECT * FROM InventoryEntry

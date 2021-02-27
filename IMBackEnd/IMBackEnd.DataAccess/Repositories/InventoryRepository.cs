@@ -16,109 +16,114 @@ namespace IMBackEnd.DataAccess.Repositories
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public bool AddToInventory(int storeId, Domain.Models.Product product)
+        public bool AddToInventory(Domain.Models.InventoryEntry inventoryEntry)
         {
-            var dbInventory = _context.Inventories.FirstOrDefault(i => i.StoreId == storeId && i.ProductId == product.Id);
+            var dbInventoryEntry = _context.InventoryEntries.FirstOrDefault(i => i.StoreId == inventoryEntry.StoreId && i.Sku == inventoryEntry.SKU);
 
-            if(dbInventory != null)
+            if(dbInventoryEntry != null)
             {
                 return false;
             }
 
-            dbInventory = new Inventory
+            dbInventoryEntry = new InventoryEntry
             {
-                StoreId = storeId,
-                ProductId = product.Id,
-                Stock = product.Stock,
-                Markup = product.Markup,
+                StoreId = inventoryEntry.StoreId,
+                Sku = inventoryEntry.SKU,
+                Name = inventoryEntry.Name,
+                Description = inventoryEntry.Description,
+                Price = inventoryEntry.Price,
+                Stock = inventoryEntry.Stock
+                
             };
 
-            _context.Inventories.Add(dbInventory);
+            _context.InventoryEntries.Add(dbInventoryEntry);
             _context.SaveChanges();
 
             return true;
         }
 
-        public bool RemoveFromInventory(int storeId, int productId)
+        public bool RemoveFromInventory(int storeId, string sku)
         {
-            var dbInventory = _context.Inventories.FirstOrDefault(i => i.StoreId == storeId && i.ProductId == productId);
+            var dbInventoryEntry = _context.InventoryEntries.FirstOrDefault(i => i.StoreId == storeId && i.Sku == sku);
 
-            if (dbInventory == null)
+            if (dbInventoryEntry == null)
             {
                 return false;
             }
 
-            _context.Inventories.Remove(dbInventory);
+            _context.InventoryEntries.Remove(dbInventoryEntry);
             _context.SaveChanges();
 
             return true;
         }
 
-        public bool EditInventory(int storeId, Domain.Models.Product product)
+        public bool EditInventory(Domain.Models.InventoryEntry inventoryEntry)
         {
-            var dbInventory = _context.Inventories.FirstOrDefault(i => i.StoreId == storeId && i.ProductId == product.Id);
+            var dbInventoryEntry = _context.InventoryEntries.FirstOrDefault(i => i.StoreId == inventoryEntry.StoreId && i.Sku == inventoryEntry.SKU);
 
-            if (dbInventory == null)
+            if (dbInventoryEntry == null)
             {
                 return false;
             }
 
-            dbInventory.Stock = product.Stock;
-            dbInventory.Markup = product.Markup;
-
+            dbInventoryEntry.StoreId = inventoryEntry.StoreId;
+            dbInventoryEntry.Sku = inventoryEntry.SKU;
+            dbInventoryEntry.Name = inventoryEntry.Name;
+            dbInventoryEntry.Description = inventoryEntry.Description;
+            dbInventoryEntry.Price = inventoryEntry.Price;
+            dbInventoryEntry.Stock = inventoryEntry.Stock;
+            
             _context.SaveChanges();
 
             return true;
         }
 
-        public IEnumerable<Domain.Models.Product> GetStoreInventory(int storeId)
+        public IEnumerable<Domain.Models.InventoryEntry> GetStoreInventory(int storeId)
         {
-            var dbInventories = _context.Inventories
-                .Include(i => i.Product)
+            var dbInventory = _context.InventoryEntries
                 .Where(i => i.StoreId == storeId);
 
-            List<Domain.Models.Product> products = new List<Domain.Models.Product>();
+            List<Domain.Models.InventoryEntry> inventoryEntries = new List<Domain.Models.InventoryEntry>();
 
-            if (!dbInventories.Any())
+            if (!dbInventory.Any())
             {
-                return products;
+                return inventoryEntries;
             }
 
-            products = dbInventories.Select(i => new Domain.Models.Product
+            inventoryEntries = dbInventory.Select(i => new Domain.Models.InventoryEntry
             {
-                Id = i.Product.Id,
-                Name = i.Product.Name,
-                Price = i.Product.Price,
-                Description = i.Product.Description,
-                Markup = i.Markup,
+                StoreId = i.StoreId,
+                SKU = i.Sku,
+                Name = i.Name,
+                Description = i.Description,
+                Price = i.Price,
                 Stock = i.Stock
             }).ToList();
 
-            return products;
+            return inventoryEntries;
         }
 
-        public Domain.Models.Product GetProductByStore(int storeId, int productId)
+        public Domain.Models.InventoryEntry GetProductByStore(int storeId, string sku)
         {
-            var dbInventory = _context.Inventories
-                .Include(i => i.Product)
-                .FirstOrDefault(i => i.StoreId == storeId && i.ProductId == productId);
+            var dbInventoryEntry = _context.InventoryEntries
+                .FirstOrDefault(i => i.StoreId == storeId && i.Sku == sku);
 
-            if(dbInventory == null)
+            if (dbInventoryEntry == null)
             {
                 return null;
             }
 
-            Domain.Models.Product product = new Domain.Models.Product
+            Domain.Models.InventoryEntry inventoryEntry = new Domain.Models.InventoryEntry
             {
-                Id = dbInventory.Product.Id,
-                Name = dbInventory.Product.Name,
-                Price = dbInventory.Product.Price,
-                Description = dbInventory.Product.Description,
-                Markup = dbInventory.Markup,
-                Stock = dbInventory.Stock
+                StoreId = dbInventoryEntry.StoreId,
+                SKU = dbInventoryEntry.Sku,
+                Name = dbInventoryEntry.Name,
+                Description = dbInventoryEntry.Description,
+                Price = dbInventoryEntry.Price,
+                Stock = dbInventoryEntry.Stock
             };
 
-            return product;
+            return inventoryEntry;
         }
     }
 }

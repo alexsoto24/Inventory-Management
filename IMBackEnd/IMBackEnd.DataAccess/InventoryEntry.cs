@@ -5,14 +5,15 @@ using System.Collections.Generic;
 
 namespace IMBackEnd.DataAccess
 {
-    public partial class Inventory
+    public partial class InventoryEntry
     {
         public int StoreId { get; set; }
-        public int ProductId { get; set; }
+        public string Sku { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
         public int Stock { get; set; }
-        public decimal Markup { get; set; }
 
-        public virtual Product Product { get; set; }
         public virtual Store Store { get; set; }
     }
 }

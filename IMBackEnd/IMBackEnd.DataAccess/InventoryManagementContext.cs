@@ -17,37 +17,23 @@ namespace IMBackEnd.DataAccess
         {
         }
 
-        public virtual DbSet<Inventory> Inventories { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<InventoryEntry> InventoryEntries { get; set; }
         public virtual DbSet<Store> Stores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<Inventory>(entity =>
+            modelBuilder.Entity<InventoryEntry>(entity =>
             {
-                entity.HasKey(e => new { e.StoreId, e.ProductId })
-                    .HasName("PK__Inventor__F0C23D6DBB05BAB5");
+                entity.HasKey(e => new { e.StoreId, e.Sku })
+                    .HasName("PK__Inventor__E7231DF1C2B8E28F");
 
-                entity.ToTable("Inventory");
+                entity.ToTable("InventoryEntry");
 
-                entity.Property(e => e.Markup).HasColumnType("money");
-
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.Inventories)
-                    .HasForeignKey(d => d.ProductId)
-                    .HasConstraintName("FK__Inventory__Produ__17F790F9");
-
-                entity.HasOne(d => d.Store)
-                    .WithMany(p => p.Inventories)
-                    .HasForeignKey(d => d.StoreId)
-                    .HasConstraintName("FK__Inventory__Store__17036CC0");
-            });
-
-            modelBuilder.Entity<Product>(entity =>
-            {
-                entity.ToTable("Product");
+                entity.Property(e => e.Sku)
+                    .HasMaxLength(16)
+                    .HasColumnName("SKU");
 
                 entity.Property(e => e.Description).HasMaxLength(999);
 
@@ -56,19 +42,24 @@ namespace IMBackEnd.DataAccess
                     .HasMaxLength(99);
 
                 entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.HasOne(d => d.Store)
+                    .WithMany(p => p.InventoryEntries)
+                    .HasForeignKey(d => d.StoreId)
+                    .HasConstraintName("FK__Inventory__Store__2180FB33");
             });
 
             modelBuilder.Entity<Store>(entity =>
             {
                 entity.ToTable("Store");
 
-                entity.HasIndex(e => e.Phone, "UQ__Store__5C7E359E60AF7B93")
+                entity.HasIndex(e => e.Phone, "UQ__Store__5C7E359E770B8839")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Address, "UQ__Store__7D0C3F3289754E86")
+                entity.HasIndex(e => e.Address, "UQ__Store__7D0C3F32810982E9")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Email, "UQ__Store__A9D10534D7A1A110")
+                entity.HasIndex(e => e.Email, "UQ__Store__A9D1053473E654DF")
                     .IsUnique();
 
                 entity.Property(e => e.Address)

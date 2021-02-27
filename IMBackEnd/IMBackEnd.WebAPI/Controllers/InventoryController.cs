@@ -23,9 +23,9 @@ namespace IMBackEnd.WebAPI.Controllers
 
         // GET api/<InventoryController>/store/5
         [HttpGet("store/{storeId}")]
-        public async Task<ActionResult<IEnumerable<Product>>> Get(int storeId)
+        public async Task<ActionResult<IEnumerable<InventoryEntry>>> Get(int storeId)
         {
-            IEnumerable<Product> dProducts;
+            IEnumerable<InventoryEntry> dProducts;
 
             try
             {
@@ -45,23 +45,23 @@ namespace IMBackEnd.WebAPI.Controllers
 
         }
 
-        [HttpGet("store/{storeId}/product/{productId}")]
-        public async Task<ActionResult<Product>> Get(int storeId, int productId)
+        [HttpGet("store/{storeId}/entry/{sku}")]
+        public async Task<ActionResult<InventoryEntry>> Get(int storeId, string sku)
         {
-            Product dProduct;
+            InventoryEntry dEntry;
 
             try
             {
-                dProduct = await Task.FromResult(_inventoryRepository.GetProductByStore(storeId, productId));
+                dEntry = await Task.FromResult(_inventoryRepository.GetProductByStore(storeId, sku));
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
 
-            if (dProduct != null)
+            if (dEntry != null)
             {
-                return Ok(dProduct);
+                return Ok(dEntry);
             }
 
             return NotFound();
@@ -69,14 +69,14 @@ namespace IMBackEnd.WebAPI.Controllers
         }
 
         // POST api/<InventoryController>
-        [HttpPost("{storeId}")]
-        public async Task<IActionResult> Post(int storeId, Product product)
+        [HttpPost]
+        public async Task<IActionResult> Post(InventoryEntry inventoryEntry)
         {
             bool created;
 
             try
             {
-                created = await Task.FromResult(_inventoryRepository.AddToInventory(storeId, product));
+                created = await Task.FromResult(_inventoryRepository.AddToInventory(inventoryEntry));
             }
             catch(Exception e)
             {
@@ -85,21 +85,21 @@ namespace IMBackEnd.WebAPI.Controllers
 
             if (created)
             {
-                return CreatedAtAction(nameof(Post), new { id = product.Id }, product);
+                return CreatedAtAction(nameof(Post), new { StoreId = inventoryEntry.StoreId, Sku = inventoryEntry.SKU }, inventoryEntry);
             }
 
             return StatusCode(409);
         }
 
         // PUT api/<InventoryController>/5
-        [HttpPut("store/{storeId}")]
-        public async Task<IActionResult> Put(int storeId, Product product)
+        [HttpPut]
+        public async Task<IActionResult> Put(InventoryEntry inventoryEntry)
         {
             bool updated;
 
             try
             {
-                updated = await Task.FromResult(_inventoryRepository.EditInventory(storeId, product));
+                updated = await Task.FromResult(_inventoryRepository.EditInventory(inventoryEntry));
             }
             catch(Exception e)
             {
@@ -115,14 +115,14 @@ namespace IMBackEnd.WebAPI.Controllers
         }
 
         // DELETE api/<InventoryController>/5
-        [HttpDelete("store/{storeId}/product/{productId}")]
-        public async Task<IActionResult> Delete(int storeId, int productId)
+        [HttpDelete("store/{storeId}/entry/{sku}")]
+        public async Task<IActionResult> Delete(int storeId, string sku)
         {
             bool deleted;
 
             try
             {
-                deleted = await Task.FromResult(_inventoryRepository.RemoveFromInventory(storeId, productId));
+                deleted = await Task.FromResult(_inventoryRepository.RemoveFromInventory(storeId, sku));
             }
             catch(Exception e)
             {

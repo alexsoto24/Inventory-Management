@@ -48,7 +48,6 @@ namespace IMBackEnd.WebAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "IMBackEnd.WebAPI", Version = "v1" });
             });
 
-            services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IStoreRepository, StoreRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
 

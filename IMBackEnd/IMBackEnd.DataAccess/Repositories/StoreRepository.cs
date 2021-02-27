@@ -77,16 +77,14 @@ namespace IMBackEnd.DataAccess.Repositories
             if (!string.IsNullOrWhiteSpace(name))
             {
                 dbStores = _context.Stores
-                    .Include(s => s.Inventories)
-                    .ThenInclude(i => i.Product)
+                    .Include(s => s.InventoryEntries)
                     .Where(s => s.Name.Contains(name))
                     .ToList();
             }
             else
             {
                 dbStores = _context.Stores
-                    .Include(s => s.Inventories)
-                    .ThenInclude(i => i.Product)
+                    .Include(s => s.InventoryEntries)
                     .ToList();
             }
 
@@ -104,13 +102,13 @@ namespace IMBackEnd.DataAccess.Repositories
                 Email = s.Email,
                 Phone = s.Phone,
                 Address = s.Address,
-                Inventory = s.Inventories.Select(i => new Domain.Models.Product
+                Inventory = s.InventoryEntries.Select(i => new Domain.Models.InventoryEntry
                 {
-                    Id = i.Product.Id,
-                    Name = i.Product.Name,
-                    Price = i.Product.Price,
-                    Description = i.Product.Description,
-                    Markup = i.Markup,
+                    StoreId = i.StoreId,
+                    SKU = i.Sku,
+                    Name = i.Name,
+                    Description = i.Description,
+                    Price = i.Price,
                     Stock = i.Stock
                 }).ToList()
             }).ToList();
@@ -122,8 +120,7 @@ namespace IMBackEnd.DataAccess.Repositories
         public IMBackEnd.Domain.Models.Store GetStoreById(int id)
         {
             var dbStore = _context.Stores
-                .Include(s => s.Inventories)
-                .ThenInclude(i => i.Product)
+                .Include(s => s.InventoryEntries)
                 .FirstOrDefault(s => s.Id == id);
             
             if(dbStore == null)
@@ -138,13 +135,13 @@ namespace IMBackEnd.DataAccess.Repositories
                 Email = dbStore.Email,
                 Phone = dbStore.Phone,
                 Address = dbStore.Address,
-                Inventory = dbStore.Inventories.Select(i => new Domain.Models.Product
+                Inventory = dbStore.InventoryEntries.Select(i => new Domain.Models.InventoryEntry
                 {
-                    Id = i.Product.Id,
-                    Name = i.Product.Name,
-                    Price = i.Product.Price,
-                    Description = i.Product.Description,
-                    Markup = i.Markup,
+                    StoreId = i.StoreId,
+                    SKU = i.Sku,
+                    Name = i.Name,
+                    Description = i.Description,
+                    Price = i.Price,
                     Stock = i.Stock
                 }).ToList()
             };
@@ -155,8 +152,7 @@ namespace IMBackEnd.DataAccess.Repositories
         public IMBackEnd.Domain.Models.Store GetStoreByEmail(string email)
         {
             var dbStore = _context.Stores
-                .Include(s => s.Inventories)
-                .ThenInclude(i => i.Product)
+                .Include(s => s.InventoryEntries)
                 .FirstOrDefault(s => s.Email == email);
 
             if (dbStore == null)
@@ -171,13 +167,13 @@ namespace IMBackEnd.DataAccess.Repositories
                 Email = dbStore.Email,
                 Phone = dbStore.Phone,
                 Address = dbStore.Address,
-                Inventory = dbStore.Inventories.Select(i => new Domain.Models.Product
+                Inventory = dbStore.InventoryEntries.Select(i => new Domain.Models.InventoryEntry
                 {
-                    Id = i.Product.Id,
-                    Name = i.Product.Name,
-                    Price = i.Product.Price,
-                    Description = i.Product.Description,
-                    Markup = i.Markup,
+                    StoreId = i.StoreId,
+                    SKU = i.Sku,
+                    Name = i.Name,
+                    Description = i.Description,
+                    Price = i.Price,
                     Stock = i.Stock
                 }).ToList()
             };
