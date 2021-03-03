@@ -48,7 +48,7 @@ namespace IMBackEnd.WebAPI
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.AllowAnyOrigin()
+                        builder.WithOrigins("http://localhost:3000")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials();
@@ -79,6 +79,8 @@ namespace IMBackEnd.WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
