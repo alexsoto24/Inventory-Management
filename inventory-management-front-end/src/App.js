@@ -11,20 +11,54 @@ function App() {
   const [open, setOpen] = useState(false);
   const [selection, setSelection] = useState("Stores");
   const [stores, setStores] = useState([])
+  const [change, setChange] = useState(false);
 
   useEffect(() => {
     const getStores = async () =>{
       const storesFromServer = await fetchStores()
       setStores(storesFromServer)
+      setChange(false)
     }
 
     getStores()
-  },[])
+  },[change])
 
   const fetchStores = async () => {
     const res = await fetch('https://localhost:44372/api/Store')
     const data = await res.json()
     return data;
+  }
+
+  const addStore = async (store) => {
+    const res = await fetch('https://localhost:44372/api/Store', {
+      method: 'Post',
+      headers:{
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(store),
+    })
+
+    //const data = await res.json()
+
+    if(!res.ok){
+      alert("Store Already Exists")
+    }else{
+      //setStores([...stores, data])
+      setChange(true)
+    }
+  }
+
+  const deleteStore = async (id) => {
+    const res = await fetch(`https://localhost:44372/api/Store/${id}`,{
+      method: 'Delete'
+    })
+
+    if(!res.status === 200){
+      alert("Error Deleting Store")
+    }else{
+      //setStores(stores.filter((store) => store.id !== id))
+      setChange(true)
+    }
   }
 
   const classes = useStyles();
@@ -53,7 +87,7 @@ function App() {
       >
         <div className={classes.drawerHeader} />
         {selection ===  "Stores" ? (
-          <Stores stores={stores}></Stores>
+          <Stores onAdd={addStore} onDelete={deleteStore} stores={stores}></Stores>
         ) : ('Inventory')}
       </main>
     </div>
