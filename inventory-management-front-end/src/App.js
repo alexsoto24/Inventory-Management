@@ -5,6 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Stores from './Components/Stores'
 import Navbar from './Components/Navbar'
 import Sidebar from './Components/Sidebar'
+import Inventory from './Components/Inventory'
 
 
 function App() {
@@ -29,6 +30,15 @@ function App() {
     return data;
   }
 
+  const fetchInventory = async (id) => {
+    const res = await fetch(`https://localhost:44372/api/Inventory/Store/${id}`)
+    const data = await res.json()
+    if(!res.ok){
+      return []
+    }
+    return data;
+  }
+
   const addStore = async (store) => {
     const res = await fetch('https://localhost:44372/api/Store', {
       method: 'Post',
@@ -44,12 +54,61 @@ function App() {
       alert("Store Already Exists")
     }else{
       //setStores([...stores, data])
+      //setChange(true)
+    }
+  }
+
+  const editStore = async (store) => {
+    const res = await fetch('https://localhost:44372/api/Store', {
+      method: 'Put',
+      headers:{
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(store),
+    })
+
+    if(!res.ok){
+      alert("Store Does Not Exist")
+    }else{
       setChange(true)
     }
   }
 
   const deleteStore = async (id) => {
     const res = await fetch(`https://localhost:44372/api/Store/${id}`,{
+      method: 'Delete'
+    })
+
+    if(!res.status === 200){
+      alert("Error Deleting Store")
+    }else{
+      //setStores(stores.filter((store) => store.id !== id))
+      setChange(true)
+    }
+  }
+
+  const addInventoryEntry = async (inventoryEntry) => {
+    console.log(JSON.stringify(inventoryEntry))
+    const res = await fetch('https://localhost:44372/api/Inventory', {
+      method: 'Post',
+      headers:{
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(inventoryEntry),
+    })
+
+    const data = await res.json()
+
+    if(!res.ok){
+      alert(data)
+    }else{
+      //setStores([...stores, data])
+      setChange(true)
+    }
+  }
+
+  const deleteInventoryEntry = async (storeId, sku) => {
+    const res = await fetch(`https://localhost:44372/api/Inventory/store/${storeId}/entry/${sku}`,{
       method: 'Delete'
     })
 
@@ -87,8 +146,8 @@ function App() {
       >
         <div className={classes.drawerHeader} />
         {selection ===  "Stores" ? (
-          <Stores onAdd={addStore} onDelete={deleteStore} stores={stores}></Stores>
-        ) : ('Inventory')}
+          <Stores onAdd={addStore} onDelete={deleteStore} stores={stores} onEdit={editStore}></Stores>
+        ) : <Inventory stores={stores} onDelete={deleteInventoryEntry} Inventory={fetchInventory} onAdd={addInventoryEntry}></Inventory>}
       </main>
     </div>
   );

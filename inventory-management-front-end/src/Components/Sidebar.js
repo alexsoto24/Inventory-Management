@@ -32,10 +32,11 @@ const Sidebar = ({open, handleDrawerClose, toggleSelection}) => {
                 <Divider />
                     <List>
                         <ListItem button onClick={ () => toggleSelection("Stores")}>
-                            <ListItemText primary="Stores" />
+                            <ListItemText primary="Manage Stores" />
                         </ListItem>
+                        <Divider />
                         <ListItem button onClick={ () => toggleSelection("Inventory")}>
-                            <ListItemText primary="Inventory" />
+                            <ListItemText primary="Manage Inventory" />
                         </ListItem>
                     </List>
                 <Divider />

@@ -7,7 +7,7 @@ import Fade from '@material-ui/core/Fade';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-const AddEditStore = ({open, handleClose, onAdd}) => {
+const AddStore = ({open, handleClose, onAdd}) => {
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -163,4 +163,4 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default AddEditStore
+export default AddStore
