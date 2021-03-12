@@ -2,11 +2,14 @@ import React from 'react'
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
-import { List, ListItemSecondaryAction} from '@material-ui/core';
+import { List, ListItemSecondaryAction } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import AddStore from './AddStore';
 import EditStore from './EditStore';
-import Container from '@material-ui/core/Container';
+import Paper from '@material-ui/core/Paper';
+import Fab from '@material-ui/core/Fab';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const Stores = ({stores, onDelete, onAdd, onEdit}) => {
 
@@ -36,10 +39,10 @@ const Stores = ({stores, onDelete, onAdd, onEdit}) => {
     };
 
     return (
-        <Container>
-          <center>
-            <h1>Stores</h1>
-          </center>
+        <Paper>
+                <center>
+                  <h1>Stores</h1>
+                </center>
           <List className={classes.root}>
             {stores.map((store) => (
               <ListItem key = {store.id}>
@@ -52,33 +55,34 @@ const Stores = ({stores, onDelete, onAdd, onEdit}) => {
                   }/>
                 
                 <ListItemSecondaryAction>
-                  <Button className={classes.button} variant="contained" color="primary" onClick={() => handleEditStoreOpen(store)}>Edit</Button>
-                  <Button className={classes.button}variant="contained" color="secondary" onClick={() => onDelete(store.id)}>Delete</Button>
+                  <Fab className={classes.button} color="primary" onClick={() => handleEditStoreOpen(store)}>
+                    <EditIcon />
+                  </Fab>
+                  <Fab className={classes.button} color="secondary" onClick={() => onDelete(store.id)}>
+                    <DeleteIcon />
+                  </Fab>
                 </ListItemSecondaryAction>
               </ListItem>
             ))}
           </List>
           <div>
             <center>
-              <Button variant="contained" color="primary" onClick={handleAddStoreOpen}>Add</Button>
+              <Button className={classes.button} variant="contained" color="primary" onClick={handleAddStoreOpen}>Add</Button>
             </center>
           </div>
           <AddStore open={addStoreOpen} handleClose={handleAddStoreClose} onAdd={onAdd}></AddStore>
           {editStoreOpen ? <EditStore open={editStoreOpen} handleClose={handleEditStoreClose} onEdit={onEdit} store={store}></EditStore> : <></>}
-        </Container>
+        </Paper>
     )
 }
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      width: '100ch',
-      height: 680,
+      width: '140ch',
+      height: 665,
       overflow: 'auto',
       marginLeft: 'auto',
       marginRight: 'auto'
-    },
-    inline: {
-      display: 'inline',
     },
     button: {
         margin: theme.spacing(2)

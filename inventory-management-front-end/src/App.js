@@ -54,7 +54,7 @@ function App() {
       alert("Store Already Exists")
     }else{
       //setStores([...stores, data])
-      //setChange(true)
+      setChange(true)
     }
   }
 
