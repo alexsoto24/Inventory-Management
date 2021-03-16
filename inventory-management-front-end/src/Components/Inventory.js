@@ -108,7 +108,7 @@ const Inventory = ({stores, onDelete, Inventory, onAdd}) => {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(4);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -148,7 +148,7 @@ const Inventory = ({stores, onDelete, Inventory, onAdd}) => {
       };
 
     return (
-        <Paper >
+        <Paper className={classes.paper}>
              <Container>
              <div>
                 <FormControl className={classes.formControl}>
@@ -157,6 +157,7 @@ const Inventory = ({stores, onDelete, Inventory, onAdd}) => {
                         className={classes.selectEmpty}
                         onChange={handleChange}
                         defaultValue={store}
+                        
                     >
                         {stores.map((store) =>(
                             <MenuItem key={store.id} value={store}>{store.name}</MenuItem>
@@ -174,6 +175,7 @@ const Inventory = ({stores, onDelete, Inventory, onAdd}) => {
                     className={classes.table}
                     aria-labelledby="tableTitle"
                     aria-label="enhanced table"
+                    size="small"
                 >
                     <EnhancedTableHead
                         classes={classes}
@@ -208,14 +210,14 @@ const Inventory = ({stores, onDelete, Inventory, onAdd}) => {
                                         <DeleteIcon/>
                                     </Fab>
                                 </TableCell>
-                                </TableRow>
+                              </TableRow>
                             );
                         })}
                     </TableBody>
                 </Table> : <center>This Store has No Inventory</center>}
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={[4, 8, 16]}
+                rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={inventory.length}
                 rowsPerPage={rowsPerPage}
@@ -233,12 +235,11 @@ const Inventory = ({stores, onDelete, Inventory, onAdd}) => {
 }
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-    },
     paper: {
-        width: '100%',
+        width: '150ch',
         marginBottom: theme.spacing(2),
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
     table: {
         minWidth: 750,
@@ -255,10 +256,7 @@ const useStyles = makeStyles((theme) => ({
         width: 1,
     },
     container: {
-        width: '150ch',
-        height: 550,
-        marginLeft: 'auto',
-        marginRight: 'auto'
+        height: 545,
     },
     button: {
         margin: theme.spacing(2)

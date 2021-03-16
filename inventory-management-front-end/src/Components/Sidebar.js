@@ -7,6 +7,9 @@ import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import StoreIcon from '@material-ui/icons/Store';
+import WorkIcon from '@material-ui/icons/Work';
 
 const Sidebar = ({open, handleDrawerClose, toggleSelection}) => {
 
@@ -32,10 +35,16 @@ const Sidebar = ({open, handleDrawerClose, toggleSelection}) => {
                 <Divider />
                     <List>
                         <ListItem button onClick={ () => toggleSelection("Stores")}>
+                            <ListItemIcon>
+                                <StoreIcon></StoreIcon>
+                            </ListItemIcon>
                             <ListItemText primary="Manage Stores" />
                         </ListItem>
                         <Divider />
                         <ListItem button onClick={ () => toggleSelection("Inventory")}>
+                            <ListItemIcon>
+                                <WorkIcon></WorkIcon>
+                            </ListItemIcon>
                             <ListItemText primary="Manage Inventory" />
                         </ListItem>
                     </List>
