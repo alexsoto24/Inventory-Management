@@ -1,4 +1,4 @@
-import React from 'react'
+import {useState, useEffect} from 'react'
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,16 +12,23 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableContainer from '@material-ui/core/TableContainer';
 
 const Stores = ({stores, onDelete, onAdd, onEdit}) => {
 
     const classes = useStyles();
 
-    const [addStoreOpen, setAddStoreOpen] = React.useState(false);
-    const [editStoreOpen, setEditStoreOpen] = React.useState(false);
-    const [store, setStore] = React.useState();
+    const [addStoreOpen, setAddStoreOpen] = useState(false);
+    const [editStoreOpen, setEditStoreOpen] = useState(false);
+    const [store, setStore] = useState();
+    const [storeList, setStoreList] = useState(stores);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
-
+    useEffect(() => {
+      setStoreList(stores)
+    },[stores])
 
     const handleAddStoreOpen = () => {
       setAddStoreOpen(true);
@@ -39,6 +46,23 @@ const Stores = ({stores, onDelete, onAdd, onEdit}) => {
     const handleEditStoreClose = () => {
       setEditStoreOpen(false);
     };
+    
+    const handleStoreSearch = (event) => {
+      if(event.target.value === ""){
+        setStoreList(stores)
+      }else{
+        setStoreList(stores.filter((store) => store.name.includes(event.target.value)))
+      }
+    }
+
+    const handleChangePage = (event, newPage) => {
+      setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(0);
+    };
 
     return (
         <Paper className={classes.paper}>
@@ -50,18 +74,24 @@ const Stores = ({stores, onDelete, onAdd, onEdit}) => {
               <FormControl className={classes.formControl}>
                 <TextField
                   id="store" 
-                  label="Search" 
+                  label="Search"
+                  onChange={handleStoreSearch}
                 ></TextField>
               </FormControl>
             </div>
-          <List className={classes.list}>
-            {stores.map((store) => (
-              <ListItem  dense key = {store.id}>
+          <TableContainer className={classes.container}>
+          {storeList.length !== 0 ? 
+            <List className={classes.list}>
+            {storeList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((store) => (
+              <ListItem key = {store.id}>
                 <ListItemText  primary = {store.name} secondary={
                   <div>
-                    <p>{store.email}</p>
-                    <p>{store.phone}</p>
-                    <p>{store.address}</p>
+                    <p>
+                      {store.email}<br/>
+                      {store.phone}<br/>
+                      {store.address}<br/>
+                    </p>
                   </div>
                   }/>
                 
@@ -75,7 +105,17 @@ const Stores = ({stores, onDelete, onAdd, onEdit}) => {
                 </ListItemSecondaryAction>
               </ListItem>
             ))}
-          </List>
+            </List>: <center>No Stores</center>}
+            </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={storeList.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
           </Container>
             <center>
               <Button className={classes.button} variant="contained" color="primary" onClick={handleAddStoreOpen}>Add</Button>
@@ -94,9 +134,7 @@ const useStyles = makeStyles((theme) => ({
       marginRight: 'auto',
     },  
     list: {
-      width: '140ch',
-      height: 620,
-      overflow: 'auto',
+      minWidth: 750
     },
     button: {
         margin: theme.spacing(2)
@@ -107,7 +145,10 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
       margin: theme.spacing(1),
-    }
+    },
+    container: {
+      height: 565,
+    },
   }));
 
 export default Stores
